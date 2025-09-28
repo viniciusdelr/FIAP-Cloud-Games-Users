@@ -1,0 +1,12 @@
+2025-09-27 23:36:55.083 -03:00 [INF] User profile is available. Using 'C:\Users\gabri\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-27 23:36:55.199 -03:00 [INF] Creating key {7e30a502-ca78-48cc-b307-d49e018dcd29} with creation date 2025-09-28 02:36:55Z, activation date 2025-09-28 02:36:55Z, and expiration date 2025-12-27 02:36:55Z.
+2025-09-27 23:36:55.222 -03:00 [INF] Writing data to file 'C:\Users\gabri\AppData\Local\ASP.NET\DataProtection-Keys\key-7e30a502-ca78-48cc-b307-d49e018dcd29.xml'.
+2025-09-27 23:36:55.651 -03:00 [INF] Now listening on: http://0.0.0.0:80
+2025-09-27 23:36:55.743 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-27 23:36:55.745 -03:00 [INF] Hosting environment: Development
+2025-09-27 23:36:55.746 -03:00 [INF] Content root path: D:\Dev FIAP\FIAP-Cloud-Games-Users\FCG\src\FCG.API
+2025-09-27 23:40:55.298 -03:00 [INF] Request starting HTTP/1.1 GET http://0.0.0.0:80/ - null null
+2025-09-27 23:40:55.341 -03:00 [INF] Requisição iniciada: GET / de IP 127.0.0.1
+2025-09-27 23:40:56.262 -03:00 [INF] Requisição finalizada com status 404
+2025-09-27 23:40:56.273 -03:00 [INF] Request finished HTTP/1.1 GET http://0.0.0.0:80/ - 404 0 null 981.6551ms
+2025-09-27 23:40:56.276 -03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://0.0.0.0:80/, Response status code: 404
