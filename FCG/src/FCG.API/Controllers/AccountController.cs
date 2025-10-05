@@ -15,7 +15,7 @@ namespace FCG.Controllers
             _context = context;
         }
 
-        [HttpPost("register")]
+        //[HttpPost("register")]
         public async Task<ActionResult> Register([FromBody] AccountDto dto)
         {
             if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
