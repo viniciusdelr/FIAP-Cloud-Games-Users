@@ -9,8 +9,8 @@ namespace FCG.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly DataContext _context;
-        public AccountController(DataContext context)
+        private readonly AppDbContext _context;
+        public AccountController(AppDbContext context)
         {
             _context = context;
         }

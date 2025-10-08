@@ -1,15 +1,21 @@
-﻿using Microsoft.EntityFrameworkCore;
-using FCG.Domain.Entities;
+﻿using FCG.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace FCG.Infrastructure.Data
 {
-    public class DataContext : DbContext
+    public class AppDbContext : DbContext
     {
-        public DataContext(DbContextOptions<DataContext> options) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            
         }
 
         public DbSet<Users> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Users>().ToTable("Users", schema: "users");
+        }
     }
 }

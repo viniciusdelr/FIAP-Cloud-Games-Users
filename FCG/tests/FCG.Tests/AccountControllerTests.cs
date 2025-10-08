@@ -11,16 +11,16 @@ namespace FCG.Tests.Domain
 {
     public class AccountControllerTests
     {
-        private readonly DataContext _context;
+        private readonly AppDbContext _context;
         private readonly AccountController _controller;
 
         public AccountControllerTests()
         {
-            var options = new DbContextOptionsBuilder<DataContext>()
+            var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // garante banco isolado
                 .Options;
 
-            _context = new DataContext(options);
+            _context = new AppDbContext(options);
             _controller = new AccountController(_context);
         }
 

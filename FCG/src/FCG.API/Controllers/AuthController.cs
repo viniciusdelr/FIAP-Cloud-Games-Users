@@ -12,9 +12,9 @@ namespace FCG.Controllers
     public class AuthController : ControllerBase
     {
         private readonly JwtSettings _jwtSettings;
-        private readonly DataContext _context;
+        private readonly AppDbContext _context;
 
-        public AuthController(DataContext context, JwtSettings jwtSettings)
+        public AuthController(AppDbContext context, JwtSettings jwtSettings)
         {
             _jwtSettings = jwtSettings;
             _context = context;
