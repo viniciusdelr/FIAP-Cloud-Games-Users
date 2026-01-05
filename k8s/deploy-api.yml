@@ -17,7 +17,7 @@ spec:
         image: viniciusdelr/users-service:latest 
         imagePullPolicy: Always 
         ports:
-        - containerPort: 8080 
+        - containerPort: 80 
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: "Development"
@@ -33,4 +33,4 @@ spec:
   ports:
   - protocol: TCP
     port: 80      
-    targetPort: 8080 
+    targetPort: 80 
