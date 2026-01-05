@@ -47,6 +47,6 @@ jobs:
         with:
           action: deploy
           manifests: |
-            .k8s\deploy-api.yml
+            k8s/deploy-api.yaml
           images: |
             viniciusdelr/users-service:latest
