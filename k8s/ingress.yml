@@ -1,0 +1,38 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gateway-principal
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      # --- API USERS ---
+      - path: /users(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: servico-api-users   
+            port:
+              number: 80
+
+      # --- API GAMES ---
+      - path: /games(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: servico-api-games    
+            port:
+              number: 80
+
+      # --- API PAYMENTS ---
+      - path: /payments(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: servico-api-payments 
+            port:
+              number: 80
