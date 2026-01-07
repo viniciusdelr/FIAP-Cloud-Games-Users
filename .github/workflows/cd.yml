@@ -1,14 +1,12 @@
-name: Build, Push and Deploy to Azure
+name: CD - Build and Refresh AKS
 
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
-  build-push-deploy: 
-    name: Build Docker and Deploy to Azure
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,7 +27,7 @@ jobs:
           push: true
           tags: viniciusdelr/users-service:latest
           build-args: |
-            NEW_RELIC_LICENSE_KEY=${{ secrets.NEW_RELIC_LICENSE_KEY }}
+             NEW_RELIC_LICENSE_KEY=${{ secrets.NEW_RELIC_LICENSE_KEY }}
 
       - name: Azure Login
         uses: azure/login@v1
@@ -39,14 +37,9 @@ jobs:
       - name: Set AKS Context
         uses: azure/aks-set-context@v3
         with:
-          resource-group: fiap-rg
-          cluster-name: aks-fiap-cluster 
+          resource-group: fiap-rg         
+          cluster-name: aks-fiap-cluster  
 
-      - name: Deploy to Kubernetes
-        uses: azure/k8s-deploy@v4
-        with:
-          action: deploy
-          manifests: |
-            k8s/deploy-api.yml
-          images: |
-            viniciusdelr/users-service:latest
+      - name: Refresh Deployment in AKS
+        run: |
+          kubectl rollout restart deployment/api-users-deployment
