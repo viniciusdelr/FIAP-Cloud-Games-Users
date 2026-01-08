@@ -8,6 +8,7 @@ using System.Text;
 using FCG.Middlewares;
 using Serilog;
 using System;
+using Microsoft.OpenApi.Models;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -136,11 +137,22 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-//if (app.Environment.IsDevelopment())
-//{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-//}
+app.UseSwagger(c =>
+{
+    c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+    {
+        if (httpReq.Headers.ContainsKey("X-Forwarded-Host"))
+        {
+            var serverUrl = $"{httpReq.Scheme}://{httpReq.Headers["X-Forwarded-Host"]}/users";
+            swaggerDoc.Servers = new List<OpenApiServer> { new OpenApiServer { Url = serverUrl } };
+        }
+    });
+});
+
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("./v1/swagger.json", "API Users V1");
+});
 
 app.UseMiddleware<ExceptionMiddleware>();
 
