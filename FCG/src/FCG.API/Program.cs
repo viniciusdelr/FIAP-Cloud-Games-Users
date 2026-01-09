@@ -9,6 +9,7 @@ using FCG.Middlewares;
 using Serilog;
 using System;
 using Microsoft.OpenApi.Models;
+using MassTransit;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -116,8 +117,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.WebHost.UseUrls("http://0.0.0.0:80");
 
-var app = builder.Build();
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingAzureServiceBus((context, cfg) =>
+    {
+        cfg.Host(builder.Configuration.GetConnectionString("ServiceBusConnection"));
+    });
+});
 
+var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {

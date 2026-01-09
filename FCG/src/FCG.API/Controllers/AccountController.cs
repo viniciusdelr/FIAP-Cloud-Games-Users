@@ -4,12 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using FCG.Application.DTOs;
+using MassTransit;
+using FCG.API.Events;
 
 namespace FCG.Controllers
 {
     public class AccountController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IPublishEndpoint _publishEndpoint;
         public AccountController(AppDbContext context)
         {
             _context = context;
@@ -41,6 +44,13 @@ namespace FCG.Controllers
                 Password = hashedPassword,
                 Admin = false
             };
+
+            await _publishEndpoint.Publish(new UserCreatedEvent
+            {
+                UserId = user.Id,
+                Username = user.Username,
+                Email = user.Email
+            });
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
