@@ -12,11 +12,11 @@ namespace FCG.Controllers
     public class AccountController : Controller
     {
         private readonly AppDbContext _context;
-        private readonly IPublishEndpoint _publishEndpoint;
-        public AccountController(AppDbContext context, IPublishEndpoint publishEndpoint)
+        private readonly ISendEndpointProvider _sendEndpointProvider;
+        public AccountController(AppDbContext context, ISendEndpointProvider sendEndpointProvider)
         {
             _context = context;
-            _publishEndpoint = publishEndpoint;
+            _sendEndpointProvider = sendEndpointProvider;
         }
 
         [HttpPost("register")]
@@ -49,12 +49,21 @@ namespace FCG.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            await _publishEndpoint.Publish(new UserCreatedEvent
+            try
             {
-                UserId = user.Id, 
-                Username = user.Username, 
-                Email = user.Email
-            });
+                var endpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri("queue:user-created-queue"));
+
+                await endpoint.Send(new UserCreatedEvent
+                {
+                    UserId = user.Id,
+                    Username = user.Username,
+                    Email = user.Email
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao enviar mensagem: {ex.Message}");
+            }
 
             return Ok(new { mensagem = "Usuário cadastrado com sucesso!" });
         }
