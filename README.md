@@ -1,75 +1,69 @@
-# FIAP-Cloud-Games-Users
+# FIAP Cloud Games - Users API
 
-Serviço responsável pelo cadastro, login e gerenciamento de usuários da plataforma FIAP Cloud Games.
+Microsserviço responsável pela gestão de identidade (Identity Provider) do ecossistema FIAP Cloud Games. Este serviço gerencia o ciclo de vida dos usuários e provê autenticação via tokens JWT para os serviços de Games e Payments.
 
+## Arquitetura e Lógica
 
-# Tecnologias
+Esta API atua como a porta de entrada de segurança.
+* **Banco de Dados**: Utiliza SQL Server (hospedado no Azure SQL Database ou container local) para persistência dos dados de cadastro.
+* **Segurança**: Gera tokens JWT (JSON Web Tokens) assinados. Os outros microsserviços (Games e Payments) validam esse token para autorizar requisições.
+* **Hospedagem**: A aplicação roda em containers Linux orquestrados por Kubernetes (AKS) na Azure.
 
-.NET 8 (ou versão usada)
+## Tecnologias
 
-Entity Framework Core
+* .NET 8
+* Entity Framework Core (Code First)
+* SQL Server
+* Docker
+* Swashbuckle (Swagger)
 
-SQL Server / Azure SQL
+## Configuração (Variáveis de Ambiente)
 
-Docker
+Para rodar localmente ou no cluster, as seguintes configurações são obrigatórias no `appsettings.json` ou como variáveis de ambiente:
 
-# Funcionalidades
+* `ConnectionStrings:DefaultConnection`: String de conexão com o SQL Server.
+* `Jwt:Key`: Chave secreta para assinatura do token (deve ser a mesma configurada nos outros microsserviços).
+* `Jwt:Issuer`: Emissor do token (Ex: FCG_Auth).
+* `Jwt:Audience`: Público do token (Ex: FCG_Gamers).
 
-CRUD de usuários
+## Execução Local (Docker)
 
-Autenticação JWT
+Certifique-se de que o SQL Server esteja rodando e acessível.
 
-Validação de e-mail e senha
+1. Construir a imagem:
+   docker build -t fcg-users .
 
-Registro de logs
+2. Rodar o container (exemplo injetando conexão):
+   docker run -d -p 8080:80 \
+     -e "ConnectionStrings:DefaultConnection=Server=host.docker.internal;Database=FcgUsersDb;User Id=sa;Password=SuaSenhaForte;" \
+     --name fcg-users \
+     fcg-users
 
-Integração com outros microsserviços
+## Deploy na Azure (Kubernetes)
 
-# Instalação
+No ambiente de produção (Azure), o funcionamento segue este fluxo:
+1. A imagem Docker é enviada para o Azure Container Registry (ACR).
+2. O cluster AKS (Azure Kubernetes Service) baixa a imagem.
+3. As configurações sensíveis (Connection String e Chave JWT) são injetadas via **Kubernetes Secrets**.
+4. O serviço é exposto internamente no cluster para validar tokens, mas acessível externamente apenas via Ingress/LoadBalancer para Login e Cadastro.
 
-1. Clone o repositório:
-git clone https://github.com/seu-usuario/nome-repositorio.git
+## Endpoints
 
-2. Acesse o diretório do projeto:
-cd nome-repositorio
+A documentação completa está disponível no Swagger (/swagger/index.html) quando a aplicação está em modo Development.
 
-3. Instale as dependências:
-dotnet restore
+### Account
+* `POST /register`: Cria um novo usuário no sistema.
+  * **Input**: Nome, Email, Senha.
+  * **Lógica**: Criptografa a senha antes de salvar no banco.
 
-# Configuração
+### Auth
+* `POST /Auth/Login`: Autentica um usuário existente.
+  * **Input**: Email, Senha.
+  * **Output**: Retorna um Token JWT (Bearer) contendo o ID do usuário (NameIdentifier) e Email.
+  * **Uso**: Este token deve ser enviado no Header `Authorization` para acessar rotas protegidas nos serviços de Games e Payments.
 
-Configure o appsettings.json ou variáveis de ambiente com:
+## Testes
 
-String de conexão do banco de dados
-
-Chaves JWT
-
-Configurações do Docker
-
-Exemplo:
-
-<img width="822" height="225" alt="image" src="https://github.com/user-attachments/assets/f23a91b5-dd26-41dd-bf1a-3c100970acc5" />
-
-# Execução
-
-dotnet run
-
-Docker:
-docker build -t nome-servico:latest .
-docker run -d -p 5000:80 --name nome-servico nome-servico:latest
-
-# Endpoints
-
-<img width="474" height="269" alt="image" src="https://github.com/user-attachments/assets/c0093ce1-a534-4678-98a0-1c2cde716354" />
-
-POST /register:	Cadastro de usuário
-
-POST /auth/login:	Login e geração de token JWT
-
-# Testes
-
-Rodar testes unitários:
+O projeto contém testes unitários para validar as regras de negócio e geração de token.
 
 dotnet test
-
-
