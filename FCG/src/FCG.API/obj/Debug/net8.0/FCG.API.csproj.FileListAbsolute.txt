@@ -386,3 +386,9 @@ D:\Dev FIAP\FIAP-Cloud-Games-Users\FCG\src\FCG.API\obj\Debug\net8.0\refint\FCG.A
 D:\Dev FIAP\FIAP-Cloud-Games-Users\FCG\src\FCG.API\obj\Debug\net8.0\FCG.API.pdb
 D:\Dev FIAP\FIAP-Cloud-Games-Users\FCG\src\FCG.API\obj\Debug\net8.0\FCG.API.genruntimeconfig.cache
 D:\Dev FIAP\FIAP-Cloud-Games-Users\FCG\src\FCG.API\obj\Debug\net8.0\ref\FCG.API.dll
+D:\Dev FIAP\FIAP-Cloud-Games-Users\FCG\src\FCG.API\bin\Debug\net8.0\Azure.Core.Amqp.dll
+D:\Dev FIAP\FIAP-Cloud-Games-Users\FCG\src\FCG.API\bin\Debug\net8.0\Azure.Messaging.ServiceBus.dll
+D:\Dev FIAP\FIAP-Cloud-Games-Users\FCG\src\FCG.API\bin\Debug\net8.0\MassTransit.dll
+D:\Dev FIAP\FIAP-Cloud-Games-Users\FCG\src\FCG.API\bin\Debug\net8.0\MassTransit.Abstractions.dll
+D:\Dev FIAP\FIAP-Cloud-Games-Users\FCG\src\FCG.API\bin\Debug\net8.0\MassTransit.Azure.ServiceBus.Core.dll
+D:\Dev FIAP\FIAP-Cloud-Games-Users\FCG\src\FCG.API\bin\Debug\net8.0\Microsoft.Azure.Amqp.dll
