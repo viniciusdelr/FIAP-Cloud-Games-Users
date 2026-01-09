@@ -13,9 +13,10 @@ namespace FCG.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IPublishEndpoint _publishEndpoint;
-        public AccountController(AppDbContext context)
+        public AccountController(AppDbContext context, IPublishEndpoint publishEndpoint)
         {
             _context = context;
+            _publishEndpoint = publishEndpoint;
         }
 
         [HttpPost("register")]
@@ -45,15 +46,15 @@ namespace FCG.Controllers
                 Admin = false
             };
 
-            await _publishEndpoint.Publish(new UserCreatedEvent
-            {
-                UserId = user.Id,
-                Username = user.Username,
-                Email = user.Email
-            });
-
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+
+            await _publishEndpoint.Publish(new UserCreatedEvent
+            {
+                UserId = user.Id, 
+                Username = user.Username, 
+                Email = user.Email
+            });
 
             return Ok(new { mensagem = "Usuário cadastrado com sucesso!" });
         }
